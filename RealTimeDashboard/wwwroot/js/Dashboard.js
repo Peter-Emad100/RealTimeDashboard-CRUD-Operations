@@ -26,12 +26,15 @@ connection.on("ReceiveItems", function (items) {
         updateBtn.textContent = "Update";
         updateBtn.onclick = function () {
             var action = "update";
-            var payload = {
-                    id: item.id,
-                    name: document.getElementById("nameInput").value,
-                    price: parseFloat(document.getElementById("priceInput").value),
-                    quantity: parseInt(document.getElementById("quantityInput").value)
-             };
+            const payload = { id: item.id };
+
+            const nameValue = document.getElementById("nameInput").value;
+            const priceValue = document.getElementById("priceInput").value;
+            const quantityValue = document.getElementById("quantityInput").value;
+
+            if (nameValue) payload.name = nameValue;
+            if (priceValue) payload.price = parseFloat(priceValue);
+            if (quantityValue) payload.quantity = parseInt(quantityValue);
             sendDashboardAction(action, payload);
             clearInputFields();
         };
