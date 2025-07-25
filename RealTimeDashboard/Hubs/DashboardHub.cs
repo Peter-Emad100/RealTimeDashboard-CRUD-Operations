@@ -10,14 +10,10 @@ namespace RealTimeDashboard.Hubs
 
         public async Task DashboardAction(string messageJson)
         {
-            Console.WriteLine(messageJson);
             var msg = JsonSerializer.Deserialize<DashboardMessage>(messageJson, new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true
             });
-            Console.WriteLine(msg);
-            Console.WriteLine(msg.Action);
-            Console.WriteLine(msg.Payload);
             switch (msg.Action)
             {
                 case "insert":
