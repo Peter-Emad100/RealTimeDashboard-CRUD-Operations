@@ -39,6 +39,20 @@ connection.on("ReceiveItems", function (items) {
         var deleteBtn = document.createElement("button");
         deleteBtn.textContent = "Delete";
         deleteBtn.onclick = function () {
+            var action = "delete";
+            var payload = {
+                id: item.id
+            };
+
+            var messageJson = JSON.stringify({
+                action: action,
+                payload: payload
+            });
+            console.log("Sending message:", messageJson);
+
+            connection.invoke("DashboardAction", messageJson).catch(function (err) {
+                return console.error(err.toString());
+            });
         };
 
         li.appendChild(updateBtn);
