@@ -3,6 +3,7 @@
 
 var connection = new signalR.HubConnectionBuilder().withUrl("/DashboardHub").build();
 document.getElementById("sendButton").disabled = true;
+document.getElementById("clearButton").disabled = true;
 
 connection.on("ReceiveItems", function (items) {
     console.log("Received items:", items);
@@ -18,6 +19,7 @@ connection.on("ReceiveItems", function (items) {
 
 connection.start().then(function () {
     document.getElementById("sendButton").disabled = false;
+    document.getElementById("clearButton").disabled = false;
 }).catch(function (err) {
     return console.error(err.toString());
 });
@@ -43,3 +45,18 @@ document.getElementById("sendButton").addEventListener("click", function (event)
     event.preventDefault();
 });
 
+document.getElementById("clearButton").addEventListener("click", function (event) {
+    console.log("clear button clicked");
+    var action = "clear";
+    var payload = {};
+    var messageJson = JSON.stringify({
+        action: action,
+        payload: payload
+    });
+    console.log("Sending message:", messageJson);
+
+    connection.invoke("DashboardAction", messageJson).catch(function (err) {
+        return console.error(err.toString());
+    });
+    event.preventDefault();
+});
