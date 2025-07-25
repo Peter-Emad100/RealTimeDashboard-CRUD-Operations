@@ -1,0 +1,45 @@
+﻿
+"use strict";
+
+var connection = new signalR.HubConnectionBuilder().withUrl("/DashboardHub").build();
+document.getElementById("sendButton").disabled = true;
+
+connection.on("ReceiveItems", function (items) {
+    console.log("Received items:", items);
+    var list = document.getElementById("itemsList");
+    list.innerHTML = "";
+
+    items.forEach(function (item) {
+        var li = document.createElement("li");
+        li.textContent = `Name: ${item.name}, Price: ${item.price}, Quantity: ${item.quantity}`;
+        list.appendChild(li);
+    });
+});
+
+connection.start().then(function () {
+    document.getElementById("sendButton").disabled = false;
+}).catch(function (err) {
+    return console.error(err.toString());
+});
+
+document.getElementById("sendButton").addEventListener("click", function (event) {
+    console.log("Insert button clicked"); 
+    var action = "insert";
+    var payload = {
+        name: document.getElementById("nameInput").value,
+        price: parseFloat(document.getElementById("priceInput").value),
+        quantity: parseInt(document.getElementById("quantityInput").value)
+    };
+
+    var messageJson = JSON.stringify({
+        action: action,
+        payload: payload
+    });
+    console.log("Sending message:", messageJson);
+
+    connection.invoke("DashboardAction", messageJson).catch(function (err) {
+        return console.error(err.toString());
+    });
+    event.preventDefault();
+});
+
