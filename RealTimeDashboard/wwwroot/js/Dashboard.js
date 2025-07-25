@@ -12,7 +12,37 @@ connection.on("ReceiveItems", function (items) {
 
     items.forEach(function (item) {
         var li = document.createElement("li");
-        li.textContent = `Name: ${item.name}, Price: ${item.price}, Quantity: ${item.quantity}`;
+        li.textContent = `Name: ${item.name}, Price: ${item.price}, Quantity: ${item.quantity} `;
+
+        var updateBtn = document.createElement("button");
+        updateBtn.textContent = "Update";
+        updateBtn.onclick = function () {
+                var action = "update";
+            var payload = {
+                    id: item.id,
+                    name: document.getElementById("nameInput").value,
+                    price: parseFloat(document.getElementById("priceInput").value),
+                    quantity: parseInt(document.getElementById("quantityInput").value)
+                };
+
+                var messageJson = JSON.stringify({
+                    action: action,
+                    payload: payload
+                });
+                console.log("Sending message:", messageJson);
+
+                connection.invoke("DashboardAction", messageJson).catch(function (err) {
+                    return console.error(err.toString());
+                });
+        };
+
+        var deleteBtn = document.createElement("button");
+        deleteBtn.textContent = "Delete";
+        deleteBtn.onclick = function () {
+        };
+
+        li.appendChild(updateBtn);
+        li.appendChild(deleteBtn);
         list.appendChild(li);
     });
 });
