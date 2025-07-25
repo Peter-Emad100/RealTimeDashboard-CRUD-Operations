@@ -17,12 +17,24 @@ namespace RealTimeDashboard.Hubs
             switch (msg.Action)
             {
                 case "insert":
-                    var newItem = msg.Payload.Deserialize<Item>(new JsonSerializerOptions
+                    Item? newItem =null ;
+                    try
                     {
-                        PropertyNameCaseInsensitive = true
-                    });
-                    newItem.Id = Guid.NewGuid();
-                    items[newItem.Id] = newItem;
+                        newItem = msg.Payload.Deserialize<Item>(new JsonSerializerOptions
+                        {
+                            PropertyNameCaseInsensitive = true
+                        });
+                    }
+                    catch(JsonException ex)
+                    {
+                        newItem = null;
+                        Console.WriteLine($"Insert payload deserialization failed: {ex.Message}");
+                    }
+                    if (newItem != null)
+                    {
+                        newItem.Id = Guid.NewGuid();
+                        items[newItem.Id] = newItem;
+                    }
                     break;
 
                 case "update":

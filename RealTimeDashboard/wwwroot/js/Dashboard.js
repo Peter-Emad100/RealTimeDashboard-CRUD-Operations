@@ -69,7 +69,13 @@ document.getElementById("sendButton").addEventListener("click", function (event)
         price: parseFloat(document.getElementById("priceInput").value),
         quantity: parseInt(document.getElementById("quantityInput").value)
     };
-    sendDashboardAction(action, payload);
+    if (payload.name && payload.price && payload.quantity) {
+        sendDashboardAction(action, payload);
+        document.getElementById("errorMessage").textContent = "";
+    }
+    else {
+        document.getElementById("errorMessage").textContent = "Please fill in Name, Price, and Quantity before inserting an item.";
+    }
     clearInputFields();
     event.preventDefault();
 });
