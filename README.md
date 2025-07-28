@@ -47,16 +47,25 @@ All client-server communication follows this JSON structure:
 | clear   | {} |
 
 ---
+## 🧠 How It Works (Message Handling Logic)
 
-## ⚙️ Generalized Message Handling (Backend)
-All messages are processed via a single hub method that:
-1. Deserializes incoming JSON into a DashboardMessage
-2. Uses switch-case on action to perform:
-   - Insert: Adds new item with generated Guid ID
-   - Update: Modifies existing item fields by ID
-   - Delete: Removes item by ID
-   - Clear: Removes all items
-3. Broadcasts updated items list to all connected clients via `Clients.All.SendAsync("ReceiveItems", items.Values)`
+All incoming messages are handled through a single SignalR hub method that:
+
+1. **Deserializes** incoming JSON into a `DashboardMessage` object.
+2. **Delegates logic** to an `ActionDispatcher`, which:
+   - Uses a registry of handlers (`IMessageActionHandler`) mapped to each action (e.g., insert, update, delete, clear).
+   - Automatically routes the message to the correct handler based on the action type.
+3. Each handler performs its specific logic:
+   - `InsertHandler`: Adds a new item with a generated `Guid` ID.
+   - `UpdateHandler`: Updates existing item fields based on the payload and ID.
+   - `DeleteHandler`: Deletes item by ID.
+   - `ClearHandler`: Clears all items.
+4. After processing, the updated item list is **broadcast to all connected clients** using:
+
+```csharp
+Clients.All.SendAsync("ReceiveItems", items.Values);
+```
+
 
 ---
 
