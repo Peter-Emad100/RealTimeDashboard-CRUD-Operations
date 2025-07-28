@@ -1,4 +1,4 @@
-﻿namespace RealTimeDashboard.Classes
+﻿namespace RealTimeDashboard.Models
 {
     public class Item
     {

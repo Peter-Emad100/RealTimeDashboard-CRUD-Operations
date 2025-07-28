@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace RealTimeDashboard.Classes
+namespace RealTimeDashboard.Models
 {
     public class DashboardMessage
     {

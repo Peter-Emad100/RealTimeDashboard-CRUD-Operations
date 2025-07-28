@@ -1,5 +1,4 @@
 using RealTimeDashboard.Hubs;
-using RealTimeDashboard.Classes;
 namespace RealTimeDashboard
 {
     public class Program

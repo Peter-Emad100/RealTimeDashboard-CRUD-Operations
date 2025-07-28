@@ -1,4 +1,4 @@
-﻿using RealTimeDashboard.Classes;
+﻿using RealTimeDashboard.Models;
 using System.Collections.Concurrent;
 using System.Text.Json;
 
